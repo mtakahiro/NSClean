@@ -158,7 +158,14 @@ class NSClean:
             # $A^+ = (A^H A)^{-1} A^H$
             A = np.matmul(p, B)
             AH = np.conjugate(A.transpose()) # Hermitian transpose of A
-            pinv_PB = np.matmul(np.linalg.inv(np.matmul(AH, A)), AH)
+            # from numpy.linalg import det
+            # determinant = det(np.matmul(AH, A))
+            try:
+                pinv_PB = np.matmul(np.linalg.inv(np.matmul(AH, A)), AH)
+            except:
+                # When singular matrix;
+                model[y] = np.nan
+                continue
             
             # Solve for the Fourier transform of this line's background samples.
             # The way that we have done it, this multiplies the input data by the 
